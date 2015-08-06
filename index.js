@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 /*
-       _           __        ____
-      (_)___ _____/ /__     / __/_  __________  ___  _____
-     / / __ `/ __  / _ \   / /_/ / / /_  /_  / / _ \/ ___/
-    / / /_/ / /_/ /  __/  / __/ /_/ / / /_/ /_/  __/ /
- __/ /\__,_/\__,_/\___/  /_/  \__,_/ /___/___/\___/_/
-/___/ Fuzzin' yo' jade for fun and profit
+
+        __  __      __     ____
+       / / / /___  / /_   / __/_  __________
+      / /_/ / __ \/ __/  / /_/ / / /_  /_  /
+     / __  / /_/ / /_   / __/ /_/ / / /_/ /_
+    /_/ /_/\____/\__/  /_/  \__,_/ /___/___/
+
+    Have you ever compiled two templates...
+    ...whilst jumping through the air and saying AAH!?
 
 */
 
@@ -21,7 +24,7 @@ var fs        = require("fs"),
 // Spit out banner
 console.log(
     fs.readFileSync(__filename, "utf8")
-        .split("\n").slice(3,10).join("\n").dim);
+        .split("\n").slice(3,13).join("\n").dim);
 
 program
     .version(manifest.version)
@@ -51,28 +54,44 @@ var template =
 
 
 // ---------- Let the fuzzing commence!
-var events = fuzzer(fixture, template);
+fuzzer(fixture, template)
+    .on("startingIteration", function(iteration){
+        console.log("Starting iteration number %s".cyan, iteration);
+    })
+    .on("transformingLeaves", function(fuzzerName){
+        console.log("\tRunning leaf node fuzzer (%s)".cyan.dim, fuzzerName);
+    })
+    .on("testingRendering", function(fuzzerName){
+        console.log("\tTesting rendering against fuzzer (%s)".cyan.dim, fuzzerName);
+    })
+    .on("testingRenderingOk", function(fuzzerName){
+        console.log("\t\t -> Ok: Fuzzer (%s) rendered ok".green, fuzzerName);
+    })
+    .on("complete", function(failures){
+        if (failures) {
+            console.error((
+                "\nConcluded with %d failures.".cyan +
+                "\nThe template crashed at least once during fuzzing.\n".red +
+                "Consider adding additional type checks where errors occurred.".red
+            ), failures);
+        } else {
+            console.log("No failures".green);
+        }
 
-events.emit = function() {
-    console.log(arguments[0]);
-}
-
-
-// console.log("\nConcluded with %d failures.".cyan, failures);
-
-// if (failures) {
-//     console.error((
-//         "The template crashed at least once during fuzzing.\n" +
-//         "Consider adding additional type checks where errors occurred."
-//     ).red);
-// }
-
-// process.exit(failures);
+        process.exit(failures);
+    })
+    .on("renderFailed", function(message){
+        console.error("\t\tFailed to render template: %s".red, message.split(/\n/)[0]);
+        console.error("\t\t" + message.split(/\n/ig).slice(1).join("\n\t\t").dim);
+    });
 
 
 
-//
-//
-// //fjsldfm
-// console.error("\t\tFailed to render template: %s".red, message.split(/\n/)[0]);
-// console.error("\t\t" + message.split(/\n/ig).slice(1).join("\n\t\t").red.dim);
+
+
+
+
+
+
+
+
