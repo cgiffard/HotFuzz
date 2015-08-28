@@ -1,6 +1,6 @@
 {
   "name": "hotfuzz",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Test a jade template for common type errors",
   "main": "index.js",
   "bin": {
