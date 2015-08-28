@@ -38,7 +38,7 @@ fuzzer(fixture, template)
 
 ### Methods
 
-##### `fuzz` (<object: `fixture`>, <function: `template`>)
+##### `fuzz` (`<object: fixture>, <function: template>`)
 
 Returns: EventEmitter
 
@@ -52,20 +52,20 @@ The full list of events emitted are below.
 
 ### Events
 
-*	`startingIteration` <number: `iteration`>
+*	`startingIteration` `<number: iteration>`
 	Emitted when commencing a fuzzing iteration.
-*	`transformingLeaves` <string: `fuzzerName`>
+*	`transformingLeaves` `<string: fuzzerName>`
 	Emitted with each fuzzer when transforming the leaf nodes in the object.
-*	`testingRendering` <string: `fuzzerName`>
+*	`testingRendering` `<string: fuzzerName>`
 	Emitted with each fuzzer when attempting to render the template against the
 	transformed fixture.
-*	`testingRenderingOK` <string: `fuzzerName`>
+*	`testingRenderingOK` `<string: fuzzerName>`
 	Emitted with each fuzzer when rendering the template against the fixture did
 	not result in an error (TypeError and or otherwise.)
-*	`renderFailed` <string: `errorMessage`>
+*	`renderFailed` `<string: errorMessage>`
 	Emitted with an error message when rendering the template against the fixture
 	resulted in an error.
-*	`complete` array:[<string: `failureMessage`>...]
+*	`complete` `array:[<string: failureMessage>...]`
 	Emitted once the fuzzing operation has concluded (the fixture has no remaining
 	properties) with a list of error messages (if any) for all the template render
 	failures captured over this time.
