@@ -43,7 +43,10 @@ if (!program.fixture) {
 }
 
 console.log("Loading fixture file %s...".cyan.dim, program.fixture);
-var fixture = require(path.join(process.cwd(), program.fixture));
+var fixture = require(
+    program.fixture[0] === "/" ?
+        program.fixture :
+        path.join(process.cwd(), program.fixture));
 
 console.log("Loading and compiling jade template %s...".cyan.dim, program.jade);
 var template =
@@ -84,14 +87,3 @@ fuzzer(fixture, template)
         console.error("\t\tFailed to render template: %s".red, message.split(/\n/)[0]);
         console.error("\t\t" + message.split(/\n/ig).slice(1).join("\n\t\t").dim);
     });
-
-
-
-
-
-
-
-
-
-
-
